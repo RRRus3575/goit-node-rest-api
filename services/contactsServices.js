@@ -53,9 +53,10 @@ export async function listContacts() {
     return contact;
   }
   
-export async function changeContact() {
+export async function changeContact(id) {
   const list = await listContacts();
   if (!Array.isArray(list)) {
     throw new Error("Contacts data is not an array");
   }
+  return "Contact updated"
 }

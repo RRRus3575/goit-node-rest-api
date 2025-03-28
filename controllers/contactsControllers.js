@@ -1,45 +1,35 @@
 import * as contactsService from "../services/contactsServices.js";
+import HttpError from "../helpers/HttpError.js"
+import controllerWrapper from "../decorators/controllerWrapper.js"
 
 
-export const getAllContacts = async (req, res) => {
-    try{
+const getAllContacts = async (req, res, next) => {
         const data = await contactsService.listContacts()
         res.json(data)
-    } catch(error){
-        res.status(500).json({
-            message: error.message
-        })
-    }
+  
 };
 
-export const getOneContact = async (req, res) => {
-    try {
+const getOneContact = async (req, res, next) => {
         const { id } = req.params;
         const data = await contactsService.getContactById(id)
+        if(!data){
+            throw HttpError(404, `Contact with id=${id} not found`);
+        }
         res.json(data)
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        })
-    }
 };
 
-export const deleteContact = async (req, res) => {
-    try {
+const deleteContact = async (req, res, next) => {
         const { id } = req.params;
         const data = await contactsService.removeContact(id)
+        if(!data){
+            throw HttpError(404, `Contact with id=${id} not found`);
+        }
         res.json(data)
-        
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        })
-    }
     
 };
 
-export const createContact = async (req, res) => {
-    try {
+ const createContact = async (req, res, next) => {
+  
         const { name, email, phone } = req.body;
         if (!name || !email || !phone) {
             return res.status(400).json({ message: "Missing required fields" });
@@ -47,28 +37,28 @@ export const createContact = async (req, res) => {
   
         const newContact = await contactsService.addContact(name, email, phone);
         res.status(201).json(newContact);
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        })
-    }
     
 };
 
-export const updateContact = async (req, res) => {
-    try {
+const updateContact = async (req, res, next) => {
+
+        const {id} = req.params;
         const { name, email, phone } = req.body;
-        if (!name || !email || !phone) {
-            return res.json({message: "You updated"})
+        if (!name & !email & !phone) {
+            return res.status(400).json({ message: "Missing required fields" });
         }
-        const data = await contactsService.getContactById(id)
+        const data = await contactsService.changeContact(id)
+        if(!data){
+            throw HttpError(404, `Contact with id=${id} not found`);
+        }
         res.json(data)
-        
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        })
-    }
     
 };
 
+export default {
+    getAllContacts: controllerWrapper(getAllContacts),
+    getOneContact: controllerWrapper(getOneContact),
+    deleteContact: controllerWrapper(deleteContact),
+    createContact: controllerWrapper(createContact),
+    updateContact: controllerWrapper(updateContact)
+}
