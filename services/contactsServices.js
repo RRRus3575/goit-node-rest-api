@@ -1,15 +1,12 @@
 import fs from "node:fs/promises"
 import  path  from "node:path"
-import {fileURLToPath} from "node:url"
 import DetectFileEncodingAndLanguage from "detect-file-encoding-and-language";
 import { nanoid } from 'nanoid';
 
 
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const contactsPath = path.join(__dirname, "db", "contacts.json");
+const contactsPath = path.join( "db", "contacts.json");
 const { encoding } = await DetectFileEncodingAndLanguage(contactsPath)
+
 
 
 export async function listContacts() {
@@ -56,3 +53,9 @@ export async function listContacts() {
     return contact;
   }
   
+export async function changeContact() {
+  const list = await listContacts();
+  if (!Array.isArray(list)) {
+    throw new Error("Contacts data is not an array");
+  }
+}
