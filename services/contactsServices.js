@@ -53,10 +53,24 @@ export async function listContacts() {
     return contact;
   }
   
-export async function changeContact(id) {
+export async function changeContact(contactId, updatedData) {
   const list = await listContacts();
-  if (!Array.isArray(list)) {
-    throw new Error("Contacts data is not an array");
+
+  const index = list.findIndex((item) => item.id === contactId);
+  if (index === -1) {
+    return null;
   }
-  return "Contact updated"
+
+  const filteredData = Object.fromEntries(
+    Object.entries(updatedData).filter(([_, value]) => value !== undefined)
+  );
+
+  list[index] = {
+    ...list[index],
+    ...filteredData,
+  };
+
+  await fs.writeFile(contactsPath, JSON.stringify(list, null, 2), encoding);
+
+  return await list[index];
 }

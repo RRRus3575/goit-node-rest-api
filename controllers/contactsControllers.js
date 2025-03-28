@@ -44,10 +44,10 @@ const updateContact = async (req, res, next) => {
 
         const {id} = req.params;
         const { name, email, phone } = req.body;
-        if (!name & !email & !phone) {
+        if (!name && !email && !phone) {
             return res.status(400).json({ message: "Missing required fields" });
         }
-        const data = await contactsService.changeContact(id)
+        const data = await contactsService.changeContact(id, {name, email, phone})
         if(!data){
             throw HttpError(404, `Contact with id=${id} not found`);
         }
