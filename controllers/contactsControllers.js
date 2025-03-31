@@ -13,7 +13,7 @@ const getOneContact = async (req, res, next) => {
     const { id } = req.params;
     const data = await contactsService.getContactById(id)
     if(!data){
-        throw HttpError(404, `Contact with id=${id} not found`);
+        throw HttpError(404, `Not found`);
     }
     res.json(data)
 };
@@ -22,9 +22,9 @@ const deleteContact = async (req, res, next) => {
     const { id } = req.params;
     const data = await contactsService.removeContact(id)
     if(!data){
-        throw HttpError(404, `Contact with id=${id} not found`);
+        throw HttpError(404, `Not found`);
     }
-    res.status(204).json(data)
+    res.json(data)
     
 };
 
