@@ -37,16 +37,14 @@ export async function listContacts() {
     return null;
   }
   
-  export async function addContact(name, email, phone) {
+  export async function addContact(data) {
     const list = await listContacts();
     if (!Array.isArray(list)) {
       throw new Error("Contacts data is not an array");
     }
     const contact = {
       id: nanoid(21),
-      name,
-      email,
-      phone,
+      ...data
     };
     list.push(contact);
     await fs.writeFile(contactsPath, JSON.stringify(list, null, 2), encoding);
