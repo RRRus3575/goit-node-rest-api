@@ -4,8 +4,8 @@ import DetectFileEncodingAndLanguage from "detect-file-encoding-and-language";
 import { nanoid } from 'nanoid';
 
 
-const contactsPath = path.join( "db", "contacts.json");
-const { encoding } = await DetectFileEncodingAndLanguage(contactsPath)
+// const contactsPath = path.join( "db", "contacts.json");
+// const { encoding } = await DetectFileEncodingAndLanguage(contactsPath)
 
 
 
