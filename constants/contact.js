@@ -1,0 +1,1 @@
+export const phonePattern = /^\+?[0-9\s\-()]{10,20}$/

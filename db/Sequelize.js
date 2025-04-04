@@ -16,9 +16,10 @@ const sequelize = new Sequelize({
 
 try {
     await sequelize.authenticate();
-    console.log("Successful connection АРРРРР")
+    console.log("Database connection successful")
 } catch (error) {
     console.log(`Error connection: ${error}`)
+    process.exit(1)
 }
 
 export default sequelize;
