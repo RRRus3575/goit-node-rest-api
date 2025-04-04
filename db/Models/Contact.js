@@ -14,6 +14,9 @@ const User = sequelize.define(
       phone: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate:{
+          is: /^\+?[0-9\s\-()]{10,20}$/
+        }
       },
       favorite: {
         type: DataTypes.BOOLEAN,
