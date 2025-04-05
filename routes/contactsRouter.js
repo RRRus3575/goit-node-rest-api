@@ -9,6 +9,7 @@ const {
   deleteContact,
   createContact,
   updateContact,
+  updateFavorite
 } = contactsControllers;
 
 const contactsRouter = express.Router();
@@ -22,5 +23,7 @@ contactsRouter.delete("/:id", deleteContact);
 contactsRouter.post("/", validateBody(createContactSchema), createContact);
 
 contactsRouter.put("/:id", validateBody(updateContactSchema), updateContact);
+
+contactsRouter.patch("/:id/favorite", updateFavorite);
 
 export default contactsRouter;

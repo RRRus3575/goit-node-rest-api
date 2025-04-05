@@ -47,10 +47,27 @@ const updateContact = async (req, res, next) => {
     
 };
 
+const updateFavorite = async (req, res, next) => {
+    
+    const { id } = req.params;
+    const {favorite } = req.body
+
+    if (typeof favorite !== 'boolean') {
+        return res.status(400).json({ message: "'favorite' must be a boolean" });
+    }
+
+    const data = await contactsService.changeContact(id, req.body)
+    if(!data){
+        throw HttpError(404, `Not found`);
+    }
+    res.json(data)
+}
+
 export default {
     getAllContacts: controllerWrapper(getAllContacts),
     getOneContact: controllerWrapper(getOneContact),
     deleteContact: controllerWrapper(deleteContact),
     createContact: controllerWrapper(createContact),
-    updateContact: controllerWrapper(updateContact)
+    updateContact: controllerWrapper(updateContact),
+    updateFavorite: controllerWrapper(updateFavorite)
 }
