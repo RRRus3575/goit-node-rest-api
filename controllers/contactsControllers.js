@@ -13,7 +13,7 @@ const getOneContact = async (req, res, next) => {
     const { id } = req.params;
     const data = await contactsService.getContactById(id)
     if(!data){
-        throw HttpError(404, `Contact with id=${id} not found`);
+        throw HttpError(404, `Not found`);
     }
     res.json(data)
 };
@@ -22,9 +22,9 @@ const deleteContact = async (req, res, next) => {
     const { id } = req.params;
     const data = await contactsService.removeContact(id)
     if(!data){
-        throw HttpError(404, `Contact with id=${id} not found`);
+        throw HttpError(404, `Not found`);
     }
-    res.status(204).json(data)
+    res.json(data)
     
 };
 
@@ -47,10 +47,27 @@ const updateContact = async (req, res, next) => {
     
 };
 
+const updateFavorite = async (req, res, next) => {
+    
+    const { id } = req.params;
+    const {favorite } = req.body
+
+    if (favorite === undefined) {
+        return res.status(400).json({ message: "Body must have 'favorite'" });
+    }
+
+    const data = await contactsService.changeContact(id, {favorite})
+    if(!data){
+        throw HttpError(404, `Not found`);
+    }
+    res.json(data)
+}
+
 export default {
     getAllContacts: controllerWrapper(getAllContacts),
     getOneContact: controllerWrapper(getOneContact),
     deleteContact: controllerWrapper(deleteContact),
     createContact: controllerWrapper(createContact),
-    updateContact: controllerWrapper(updateContact)
+    updateContact: controllerWrapper(updateContact),
+    updateFavorite: controllerWrapper(updateFavorite)
 }
