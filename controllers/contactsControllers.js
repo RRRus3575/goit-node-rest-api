@@ -52,11 +52,11 @@ const updateFavorite = async (req, res, next) => {
     const { id } = req.params;
     const {favorite } = req.body
 
-    if (typeof favorite !== 'boolean') {
-        return res.status(400).json({ message: "'favorite' must be a boolean" });
+    if (favorite === undefined) {
+        return res.status(400).json({ message: "Body must have 'favorite'" });
     }
 
-    const data = await contactsService.changeContact(id, req.body)
+    const data = await contactsService.changeContact(id, {favorite})
     if(!data){
         throw HttpError(404, `Not found`);
     }

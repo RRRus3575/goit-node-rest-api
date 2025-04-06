@@ -14,3 +14,7 @@ export const updateContactSchema = Joi.object({
     phone: Joi.string().pattern(phonePattern),
     favorite: Joi.boolean(),
 })
+
+export const updateFavotiteSchema = Joi.object({
+    favorite: Joi.boolean().required(),
+})
