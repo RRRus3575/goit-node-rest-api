@@ -47,7 +47,7 @@ const updateContact = async (req, res, next) => {
     
 };
 
-const updateFavorite = async (req, res, next) => {
+const updateStatusContact = async (req, res, next) => {
     
     const { id } = req.params;
     const {favorite } = req.body
@@ -69,5 +69,5 @@ export default {
     deleteContact: controllerWrapper(deleteContact),
     createContact: controllerWrapper(createContact),
     updateContact: controllerWrapper(updateContact),
-    updateFavorite: controllerWrapper(updateFavorite)
+    updateStatusContact: controllerWrapper(updateStatusContact)
 }
