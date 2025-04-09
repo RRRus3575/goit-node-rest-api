@@ -6,7 +6,10 @@ const controllerWrapper = controller => {
             await controller(req, res, next);
         } 
         catch(error){
-            if(error instanceof ValidationError) {
+            if(error.name === "SequelizeUniqueConstraintError"){
+                error.status = 409;
+            }
+            if(error.name === "SequelizeValidationError") {
                 error.status = 400;
             }
             next(error)

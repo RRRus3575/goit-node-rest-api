@@ -1,11 +1,11 @@
-import User from '../db/Models/Contact.js';
+import Contact from '../db/Models/Contact.js';
 
 
-export const listContacts =  () => User.findAll();
+export const listContacts =  () => Contact.findAll();
   
-export  const getContactById = (id) => User.findByPk(id)
+export  const getContactById = (id) => Contact.findByPk(id)
   
-export  const addContact= async(data) => User.create(data)
+export  const addContact= async(data) => Contact.create(data)
 
 export const changeContact = async(id, data) => {
   const user = await getContactById(id);
@@ -19,7 +19,7 @@ export const changeContact = async(id, data) => {
   });
 };
 
-export  const removeContact = (id) => User.destroy({
+export  const removeContact = (id) => Contact.destroy({
   where: {
     id
   }

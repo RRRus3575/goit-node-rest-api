@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import sequelize from "../Sequelize.js";
 import { phonePattern } from "../../constants/contact.js";
 
-const User = sequelize.define(
+const Contact = sequelize.define(
     'Contact', {
       name: {
         type: DataTypes.STRING,
@@ -39,7 +39,7 @@ const User = sequelize.define(
     }
 )
 
-// User.sync()
+// Contact.sync()
 
-export default User
+export default Contact
 
