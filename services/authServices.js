@@ -1,6 +1,11 @@
 import User from "../db/Models/User.js";
 import HttpError from "../helpers/HttpError.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+const {JWT_SECRET} =process.env;
+
+
 
 export const registerUser = async(data) => {
     const {email, password} = data;
@@ -37,7 +42,9 @@ export const loginUser = async(data) => {
         throw HttpError(401, "Email or password is wrong")
     }
 
-    const token = "token"
+    const token = jwt.sign({email}, JWT_SECRET,{
+        expiresIn: "24h"
+    })
 
     return {token};
 }
