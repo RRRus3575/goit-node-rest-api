@@ -68,13 +68,15 @@ export const logoutUser = async(id)=>{
 
 }
 
-export const updateData = async(id, data) => {
+export const updateData = async(id, subscription) => {
     const user = await findUser({id})
     if(!user || !user.token) {
         throw HttpError(401, "Not authorized")
     }
 
-    await user.update(...data)
+    console.log("data", subscription)
+
+    await user.update({subscription})
 
     return user
 }

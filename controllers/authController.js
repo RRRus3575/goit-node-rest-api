@@ -37,16 +37,24 @@ const getCurrentController = (req, res)=>{
     })
 }
 
-const updateSubscribe = async(res, req) =>{
-    console.log("User in request:", req.user)
-
+const updateSubscribe = async(req, res) =>{
+    
     const {id} = req.user;
     const {subscription} = req.body;
+
+    console.log("subscription", subscription)
+
+    if(!subscription){
+        return res.status(400).json({ message: "Body must have 'subscription'" })
+    }
 
     const user = await updateData(id, subscription)
 
     res.json({
-        ...user
+        user:{
+            email: user.email,
+            subscription: user.subscription,
+        }
     })
 
 

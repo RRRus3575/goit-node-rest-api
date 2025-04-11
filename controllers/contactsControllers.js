@@ -5,7 +5,16 @@ import controllerWrapper from "../helpers/controllerWrapper.js"
 
 const getAllContacts = async (req, res, next) => {
     const {id: owner} = req.user;
-    const data = await contactsService.listContacts({owner})
+    const {favorite} = req.query
+    console.log("favorite", favorite)
+
+    const query = { owner };
+
+    if (favorite !== undefined) {
+        query.favorite = favorite === "true"; 
+    }
+    
+    const data = await contactsService.listContacts(query)
     res.json(data)
   
 };
