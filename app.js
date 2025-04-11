@@ -4,7 +4,7 @@ import cors from "cors";
 import "dotenv/config";
 import sequelize from "./db/Sequelize.js";
 import contactsRouter from "./routes/contactsRouter.js";
-import authRouter from "./routes/usersRouter.js";
+import authRouter from "./routes/authRouter.js";
 
 
 const app = express();
@@ -13,7 +13,7 @@ app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/users", authRouter)
+app.use("/api/auth", authRouter)
 app.use("/api/contacts", contactsRouter);
 
 app.use((_, res) => {

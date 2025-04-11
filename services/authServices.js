@@ -39,13 +39,17 @@ export const loginUser = async(data) => {
         throw HttpError(401, "Email or password is wrong")
     }
 
-    const payload = {email}
+    const payload = {
+        email,
+        subscription: user.subscription
+            
+    }
 
     const token = generateToken(payload)
 
     await user.update({token});
 
-    return {token};
+    return {token, payload};
 }
 
 

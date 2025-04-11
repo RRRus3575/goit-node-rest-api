@@ -1,6 +1,6 @@
 import HttpError from "../helpers/HttpError.js";
 import controllerWrapper from "../helpers/controllerWrapper.js";
-import { registerUser, loginUser, logoutUser } from "../services/usersServices.js";
+import { registerUser, loginUser, logoutUser } from "../services/authServices.js";
 
 
 const registerController = async(req, res, next) =>{
@@ -13,10 +13,14 @@ const registerController = async(req, res, next) =>{
 }
 
 const loginController = async(req, res, next) =>{
-    const {token} = await loginUser(req.body)
+    const {token, payload} = await loginUser(req.body)
 
     res.json({
         token,
+        user: {
+            email: payload.email,
+            subscription: payload.subscription
+        }
     })
 }
 
