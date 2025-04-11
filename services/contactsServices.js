@@ -1,14 +1,40 @@
-import User from '../db/Models/Contact.js';
+import Contact from '../db/Models/Contact.js';
 
 
-export const listContacts =  () => User.findAll();
+export const listContacts =  async({ owner, favorite, page, limit }) => {
+  const offset = (page - 1) * limit;
+  const filter = { owner };
+
+  if (favorite !== undefined) {
+    filter.favorite = favorite === "true"; 
+  }
+
+  const totalContacts = await Contact.count({ where: filter });
+
+  const contacts = await Contact.findAll({
+    where: filter,
+    limit, 
+    offset
+  });
+
+  return{
+    totalContacts,
+    contacts,
+    totalPages: Math.ceil(totalContacts / limit),
+    currentPage: page,
+  }
+
+
+}
   
-export  const getContactById = (id) => User.findByPk(id)
   
-export  const addContact= async(data) => User.create(data)
+export  const getContact = (query) => Contact.findOne({where: query})
+  
+export  const addContact= async(data) => Contact.create(data)
 
-export const changeContact = async(id, data) => {
-  const user = await getContactById(id);
+export const changeContact = async(query, data) => {
+  const user = await getContact(query);
+  console.log("data", data)
 
   if (!user) {
     return null;
@@ -19,10 +45,8 @@ export const changeContact = async(id, data) => {
   });
 };
 
-export  const removeContact = (id) => User.destroy({
-  where: {
-    id
-  }
+export  const removeContact = (query) => Contact.destroy({
+  where: query  
 })
   
 
