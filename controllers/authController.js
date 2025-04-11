@@ -1,6 +1,6 @@
 import HttpError from "../helpers/HttpError.js";
 import controllerWrapper from "../helpers/controllerWrapper.js";
-import { registerUser, loginUser, logoutUser } from "../services/authServices.js";
+import { registerUser, loginUser, logoutUser, updateData } from "../services/authServices.js";
 
 
 const registerController = async(req, res, next) =>{
@@ -37,9 +37,25 @@ const getCurrentController = (req, res)=>{
     })
 }
 
+const updateSubscribe = async(res, req) =>{
+    console.log("User in request:", req.user)
+
+    const {id} = req.user;
+    const {subscription} = req.body;
+
+    const user = await updateData(id, subscription)
+
+    res.json({
+        ...user
+    })
+
+
+}
+
 export default {
     registerController: controllerWrapper(registerController),
     loginController: controllerWrapper(loginController),
     getCurrentController: controllerWrapper(getCurrentController),
     logoutController: controllerWrapper(logoutController),
+    updateSubscribe: controllerWrapper(updateSubscribe),
 }

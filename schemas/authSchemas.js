@@ -13,4 +13,6 @@ export const authLoginSchema = Joi.object({
     password: Joi.string().required(),
 })
 
-
+export const subscribeSchema = Joi.object({
+    subscription: Joi.string().valid(...PLAN_TYPES).required(),
+})
