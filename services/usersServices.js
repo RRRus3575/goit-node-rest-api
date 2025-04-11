@@ -42,6 +42,9 @@ export const loginUser = async(data) => {
     const payload = {email}
 
     const token = generateToken(payload)
+
+    await user.update({token});
+
     return {token};
 }
 
@@ -49,3 +52,14 @@ export const loginUser = async(data) => {
 export const findUser = query => User.findOne({
     where: query
 })
+
+
+export const logoutUser = async(id)=>{
+    const user = await findUser({id})
+    if(!user || !user.token) {
+        throw HttpError(401, "Not authorized")
+    }
+
+    await user.update({token: null});
+
+}

@@ -1,6 +1,6 @@
 import HttpError from "../helpers/HttpError.js"
 import { verifyToken } from "../helpers/jwt.js";
-import { findUser } from "../services/authServices.js";
+import { findUser } from "../services/usersServices.js";
 
 
 const auth = async(req, res, next) =>{
@@ -20,7 +20,7 @@ const auth = async(req, res, next) =>{
     }
     
     const user = await findUser({email: payload.email})
-    if(!user) {
+    if(!user || !user.token) {
         return next(HttpError(401, "Not authorized"));
     }
     req.user = user;

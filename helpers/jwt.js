@@ -14,6 +14,7 @@ export const verifyToken =(token) =>{
             error: null,
         }
     } catch (error) {
+        console.error('Token verification failed:', error.message);
         return {
             payload: null,
             error,
