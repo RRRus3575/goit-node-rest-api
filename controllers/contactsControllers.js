@@ -4,14 +4,16 @@ import controllerWrapper from "../helpers/controllerWrapper.js"
 
 
 const getAllContacts = async (req, res, next) => {
-    const data = await contactsService.listContacts()
+    const {id: owner} = req.user;
+    const data = await contactsService.listContacts({owner})
     res.json(data)
   
 };
 
 const getOneContact = async (req, res, next) => {
+    const {id: owner} = req.user;
     const { id } = req.params;
-    const data = await contactsService.getContactById(id)
+    const data = await contactsService.getContact({id, owner})
     if(!data){
         throw HttpError(404, `Not found`);
     }
@@ -19,8 +21,9 @@ const getOneContact = async (req, res, next) => {
 };
 
 const deleteContact = async (req, res, next) => {
+    const {id: owner} = req.user;
     const { id } = req.params;
-    const data = await contactsService.removeContact(id)
+    const data = await contactsService.removeContact({id, owner})
     if(!data){
         throw HttpError(404, `Not found`);
     }
@@ -29,17 +32,19 @@ const deleteContact = async (req, res, next) => {
 };
 
  const createContact = async (req, res, next) => {
-    const newContact = await contactsService.addContact(req.body);
+    const {id: owner} = req.user;
+    const newContact = await contactsService.addContact({...req.body, owner});
     res.status(201).json(newContact);
     
 };
 
 const updateContact = async (req, res, next) => {
+    const {id: owner} = req.user;
     if (!Object.keys(req.body).length) {
         return res.status(400).json({ message: "Body must have at least one field" });
       }
-    const {id} = req.params;       
-    const data = await contactsService.changeContact(id, req.body)
+    const {id} = req.params;   
+    const data = await contactsService.changeContact({id, owner}, req.body)
     if(!data){
         throw HttpError(404, `Not found`);
     }
@@ -48,7 +53,7 @@ const updateContact = async (req, res, next) => {
 };
 
 const updateStatusContact = async (req, res, next) => {
-    
+    const {id: owner} = req.user;
     const { id } = req.params;
     const {favorite } = req.body
 
@@ -56,7 +61,7 @@ const updateStatusContact = async (req, res, next) => {
         return res.status(400).json({ message: "Body must have 'favorite'" });
     }
 
-    const data = await contactsService.changeContact(id, {favorite})
+    const data = await contactsService.changeContact({id, owner}, {favorite})
     if(!data){
         throw HttpError(404, `Not found`);
     }
