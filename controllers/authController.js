@@ -31,9 +31,11 @@ const logoutController = async(req, res) => {
 }
 
 const getCurrentController = (req, res)=>{
-    const {email} = req.user
+    const {email, subscription} = req.user
+    console.log(req.user)
     res.json({
         email,
+        subscription
     })
 }
 
