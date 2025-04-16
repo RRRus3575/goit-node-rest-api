@@ -5,6 +5,7 @@ import { generateToken } from "../helpers/jwt.js";
 
 
 export const registerUser = async(data) => {
+    console.log("data", data)
     const {email, password} = data;
     const user = await User.findOne({
         where: {
