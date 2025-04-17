@@ -1,14 +1,21 @@
 import HttpError from "../helpers/HttpError.js";
 import controllerWrapper from "../helpers/controllerWrapper.js";
 import { registerUser, loginUser, logoutUser, updateData } from "../services/authServices.js";
+import generateGravatarUrl from "../helpers/generateGravatar.js";
+import fs from "node:fs/promises";
+import path from "node:path"
 
+
+const posterDir = path.resolve("public", "avatars")
 
 const registerController = async(req, res, next) =>{
-    const newUser = await registerUser(req.body);
+    const avatarURL = await generateGravatarUrl(req.body.email)
+    const newUser = await registerUser({...req.body, avatarURL});
 
     res.status(201).json({
         email: newUser.email,
         subscription: newUser.subscription,
+        avatar: newUser.avatarURL,
     })
 }
 
@@ -50,7 +57,7 @@ const updateSubscribe = async(req, res) =>{
         return res.status(400).json({ message: "Body must have 'subscription'" })
     }
 
-    const user = await updateData(id, subscription)
+    const user = await updateData(id, {subscription})
 
     res.json({
         user:{
@@ -58,9 +65,25 @@ const updateSubscribe = async(req, res) =>{
             subscription: user.subscription,
         }
     })
-
-
 }
+
+
+const changeAvatar = async(req, res) =>{
+    const {id} = req.user;
+    let avatarURL = null
+    if(req.file) {
+        const {path: oldPath, filename} = req.file;
+        const newPath = path.join(posterDir, filename)
+        await fs.rename(oldPath, newPath)
+        avatarURL = path.join("avatars",  filename)
+    }
+    const user = await updateData(id, {avatarURL})
+    res.status(200).json({
+        avatarURL: user.avatarURL,
+    })
+}
+
+
 
 export default {
     registerController: controllerWrapper(registerController),
@@ -68,4 +91,5 @@ export default {
     getCurrentController: controllerWrapper(getCurrentController),
     logoutController: controllerWrapper(logoutController),
     updateSubscribe: controllerWrapper(updateSubscribe),
+    changeAvatar: controllerWrapper(changeAvatar),
 }

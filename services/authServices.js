@@ -5,6 +5,7 @@ import { generateToken } from "../helpers/jwt.js";
 
 
 export const registerUser = async(data) => {
+    console.log("data", data)
     const {email, password} = data;
     const user = await User.findOne({
         where: {
@@ -68,15 +69,15 @@ export const logoutUser = async(id)=>{
 
 }
 
-export const updateData = async(id, subscription) => {
+export const updateData = async(id, data) => {
     const user = await findUser({id})
     if(!user || !user.token) {
         throw HttpError(401, "Not authorized")
     }
 
-    console.log("data", subscription)
+    console.log("data", data)
 
-    await user.update({subscription})
+    await user.update({...data})
 
     return user
 }
