@@ -72,14 +72,24 @@ const changeAvatar = async(req, res) =>{
     const {id} = req.user;
     let avatarURL = null
     if(req.file) {
+        const oldAvatarURL = req.user.avatarURL;
+        if (oldAvatarURL) {
+            const publicPath = path.resolve("public");
+            const oldFilePath = path.join(publicPath, oldAvatarURL);
+            await fs.unlink(oldFilePath);
+            
+        }
+
         const {path: oldPath, filename} = req.file;
         const newPath = path.join(posterDir, filename)
         await fs.rename(oldPath, newPath)
         avatarURL = path.join("avatars",  filename)
+
     }
     const user = await updateData(id, {avatarURL})
+
     res.status(200).json({
-        avatarURL: user.avatarURL,
+        avatarURL: user.avatarURL.replace(/\\/g, "/"),
     })
 }
 
