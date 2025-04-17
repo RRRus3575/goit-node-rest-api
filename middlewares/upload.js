@@ -8,9 +8,9 @@ const tempDir = path.resolve("temp")
 const storage = multer.diskStorage({
     destination: tempDir,
     filename: (req, file, callback) => {
-        const uniquePrefix = `${DragEvent.now()}_${Math.round(Math.random() * 1E9)}`;
+        const uniquePrefix = `${Date.now()}_${Math.round(Math.random() * 1E9)}`;
         const filename = `${uniquePrefix}_${file.originalname}`;
-        callback(filename);
+        callback(null, filename);
     }
 })
 

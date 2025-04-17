@@ -3,7 +3,10 @@ import controllerWrapper from "../helpers/controllerWrapper.js";
 import { registerUser, loginUser, logoutUser, updateData } from "../services/authServices.js";
 import generateGravatarUrl from "../helpers/generateGravatar.js";
 import fs from "node:fs/promises";
+import path from "node:path"
 
+
+const posterDir = path.resolve("public", "avatars")
 
 const registerController = async(req, res, next) =>{
     const avatarURL = await generateGravatarUrl(req.body.email)
@@ -54,7 +57,7 @@ const updateSubscribe = async(req, res) =>{
         return res.status(400).json({ message: "Body must have 'subscription'" })
     }
 
-    const user = await updateData(id, subscription)
+    const user = await updateData(id, {subscription})
 
     res.json({
         user:{
@@ -66,7 +69,18 @@ const updateSubscribe = async(req, res) =>{
 
 
 const changeAvatar = async(req, res) =>{
-    const {avatarURL} = req.body;
+    const {id} = req.user;
+    let avatarURL = null
+    if(req.file) {
+        const {path: oldPath, filename} = req.file;
+        const newPath = path.join(posterDir, filename)
+        await fs.rename(oldPath, newPath)
+        avatarURL = path.join("avatars",  filename)
+    }
+    const user = await updateData(id, {avatarURL})
+    res.status(200).json({
+        avatarURL: user.avatarURL,
+    })
 }
 
 

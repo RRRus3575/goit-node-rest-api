@@ -19,7 +19,7 @@ authRouter.get("/current", auth, getCurrentController)
 
 authRouter.post("/logout", auth, logoutController)
 
-authRouter.patch("/avatar", upload.single("avatars"), changeAvatar)
+authRouter.patch("/avatar", auth, upload.single("photo"), changeAvatar)
 
 
 export default authRouter
