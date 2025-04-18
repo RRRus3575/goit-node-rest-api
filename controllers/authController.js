@@ -73,11 +73,15 @@ const changeAvatar = async(req, res) =>{
     let avatarURL = null
     if(req.file) {
         const oldAvatarURL = req.user.avatarURL;
-        if (oldAvatarURL) {
+        if (oldAvatarURL && !oldAvatarURL.startsWith("https://")) {
             const publicPath = path.resolve("public");
             const oldFilePath = path.join(publicPath, oldAvatarURL);
-            await fs.unlink(oldFilePath);
-            
+            try {
+                await fs.access(oldFilePath)
+                await fs.unlink(oldFilePath);
+            } catch (error) {
+                console.warn("Old avatar not found or couldn't delete") 
+            }
         }
 
         const {path: oldPath, filename} = req.file;
