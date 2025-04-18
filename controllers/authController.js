@@ -73,9 +73,7 @@ const changeAvatar = async(req, res) =>{
     let avatarURL = null
     if(req.file) {
         const oldAvatarURL = req.user.avatarURL;
-        if (oldAvatarURL && 
-            !oldAvatarURL.startsWith("https://") && 
-            !oldAvatarURL.includes('gravatar.com')) {
+        if (oldAvatarURL && !oldAvatarURL.startsWith("https://")) {
             const publicPath = path.resolve("public");
             const oldFilePath = path.join(publicPath, oldAvatarURL);
             try {
