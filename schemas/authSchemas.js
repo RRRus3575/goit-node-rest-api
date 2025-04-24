@@ -16,3 +16,7 @@ export const authLoginSchema = Joi.object({
 export const subscribeSchema = Joi.object({
     subscription: Joi.string().valid(...PLAN_TYPES).required(),
 })
+
+export const authVerifySchema = Joi.object({
+    email: Joi.string().pattern(emailRegex).required(),
+})

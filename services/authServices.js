@@ -2,7 +2,15 @@ import User from "../db/Models/User.js";
 import HttpError from "../helpers/HttpError.js";
 import bcrypt from "bcrypt";
 import { generateToken } from "../helpers/jwt.js";
+import { sendEmail } from "../helpers/sendEmail.js";
+import { nanoid } from "nanoid";
 
+
+const createVerifyEmail = (email, verificationCode) => ({
+    to: email,
+    subject: "Verify email",
+    html: `<a href="${process.env.APP_DOMAIN}/api/auth/verify/${verificationCode}" target="_blank">Click verify email</a>`
+})
 
 export const registerUser = async(data) => {
     console.log("data", data)
@@ -18,8 +26,18 @@ export const registerUser = async(data) => {
 
     const hashPassword = await bcrypt.hash(password, 10)
 
+    const verificationCode = nanoid(7)
 
-    return User.create({...data, password: hashPassword})
+    const newUser = await User.create({
+        ...data, 
+        password: hashPassword, 
+        verificationCode,})
+
+    const verifyEmail = createVerifyEmail(email, verificationCode)
+
+    await sendEmail(verifyEmail)
+
+    return newUser;
 }
 
 
@@ -80,4 +98,24 @@ export const updateData = async(id, data) => {
     await user.update({...data})
 
     return user
+}
+
+export const verifyUser = async (verificationCode) => {
+    const user = await findUser({verificationCode})
+    if(!user) {
+        throw HttpError(404, "User not found")
+    }
+
+    await user.update({verificationCode: null, verify: true})
+}
+
+export const recendVerifyEmail = async(email) => {
+    const user = await findUser({email})
+    if(!user) {
+        throw HttpError(404, "User not found")
+    }
+    if(user.verify){
+        throw HttpError(400, "Verification has already been passed")
+    }
+
 }
