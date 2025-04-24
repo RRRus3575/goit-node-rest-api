@@ -24,7 +24,7 @@ authRouter.post("/login", validateBody(authLoginSchema), loginController)
 
 authRouter.get("/verify/:verificationToken", vetifyController)
 
-authRouter.post("/verify". validateBody(authVerifySchema), recentVerifyEmailController)
+authRouter.post("/verify", validateBody(authVerifySchema), recentVerifyEmailController)
 
 authRouter.patch("/subscription", auth, validateBody(subscribeSchema), updateSubscribe)
 
