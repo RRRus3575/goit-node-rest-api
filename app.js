@@ -29,8 +29,8 @@ app.use((err, req, res, next) => {
 const {PORT = 3000} = process.env
 const port = Number(PORT)
 
-app.listen(port, () => {
-  console.log("Server is running. Use our API on port: 3000");
+app.listen(port, '127.0.0.1', () => {
+  console.log(`Server is running on http://127.0.0.1:${port}`);
 });
 
 

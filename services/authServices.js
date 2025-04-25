@@ -118,4 +118,8 @@ export const recendVerifyEmail = async(email) => {
         throw HttpError(400, "Verification has already been passed")
     }
 
+    const verifyEmail = createVerifyEmail(email, user.verificationCode)
+
+    await sendEmail(verifyEmail)
+
 }

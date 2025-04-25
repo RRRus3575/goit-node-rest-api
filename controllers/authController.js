@@ -1,6 +1,6 @@
 import HttpError from "../helpers/HttpError.js";
 import controllerWrapper from "../helpers/controllerWrapper.js";
-import { registerUser, loginUser, logoutUser, updateData, verifyUser } from "../services/authServices.js";
+import { registerUser, loginUser, logoutUser, updateData, verifyUser, recendVerifyEmail } from "../services/authServices.js";
 import generateGravatarUrl from "../helpers/generateGravatar.js";
 import fs from "node:fs/promises";
 import path from "node:path"
@@ -109,10 +109,11 @@ const vetifyController = async (req, res) => {
 
 const recentVerifyEmailController = async(req, res) =>{
   const {email} = req.body;
+  console.log("email", email)
   if(!email) {
     throw HttpError(400, "missing required field email")
   }
-  await recentVerifyEmailController(email)
+  await recendVerifyEmail(email)
 
   res.json({
     email,
