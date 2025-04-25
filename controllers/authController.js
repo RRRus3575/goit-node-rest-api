@@ -98,8 +98,9 @@ const changeAvatar = async(req, res) =>{
 }
 
 const vetifyController = async (req, res) => {
-    const {verificationCode} = req.params;
-    await verifyUser(verificationCode)
+    const {verificationToken} = req.params;
+    console.log("verificationCode", verificationToken)
+    await verifyUser(verificationToken)
 
     res.json({
         message: "Verification successful"
