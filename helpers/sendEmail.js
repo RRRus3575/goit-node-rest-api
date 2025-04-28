@@ -20,7 +20,7 @@ const transporter = nodemailer.createTransport({
 
 export const sendEmail = async ({ to, subject, html }) => {
   const mailOptions = {
-    from: process.env.EMAIL,
+    from: process.env.SMTP_EMAIL,
     to,
     subject,
     html,
@@ -35,3 +35,4 @@ export const sendEmail = async ({ to, subject, html }) => {
     throw error;
   }
 };
+
