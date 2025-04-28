@@ -13,7 +13,6 @@ const createVerifyEmail = (email, verificationToken) => ({
 })
 
 export const registerUser = async(data) => {
-    console.log("data", data)
     const {email, password} = data;
     const user = await User.findOne({
         where: {
